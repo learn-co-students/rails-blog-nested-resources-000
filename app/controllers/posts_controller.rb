@@ -43,7 +43,6 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    end
     respond_to do |format|
       format.html { redirect_to posts_url }
       format.json { head :no_content }
