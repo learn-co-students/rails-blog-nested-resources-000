@@ -11,16 +11,22 @@
   <% end %>
 </ul>
 
-<%= form_for [@post, @comment]  do |f| %>
-  <%= f.hidden_field :post_id, :value => @post.id %>
+Comments:
+<%= @post.comments.each do |comment| %>
+  <p><%= comment.content %></p>
+<% end %>
+
+New Comment:
+<%= form_for [@post, Comment.new]  do |f| %>
 
   <div class="field">
     <%= f.label :content %><br>
-    <%= f.text_field :content %>
+    <%= f.text_area :content %><br>
+    <%= f.hidden_field :post_id, :value => @post.id %>
   </div>
   
   <div class="actions">
-    <%= f.submit, "Create Comment" %>
+    <%= f.submit %>
   </div>
 
 <% end %>
