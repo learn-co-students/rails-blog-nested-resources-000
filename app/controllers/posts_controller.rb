@@ -10,6 +10,7 @@ class PostsController < ApplicationController
 
   def new
     @post = Post.new
+    @comment = Comment.new
   end
 
   def edit
@@ -29,13 +30,27 @@ class PostsController < ApplicationController
   end
 
   def update
-    respond_to do |format|
-      if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+    if post_params[:comment]
+      @comment = Comment.create(post_params[:comment])
+      @comment.post = set_post
+      respond_to do |format|
+        if @comment.save
+          format.html { redirect_to @post, notice: 'Comment was successfully posted.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'show' }
+          format.json { render json: @comment.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        if @post.update(post_params)
+          format.html { redirect_to @post, notice: 'Post was successfully updated.' }
+          format.json { head :no_content }
+        else
+          format.html { render action: 'edit' }
+          format.json { render json: @post.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -54,6 +69,9 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:name, :content, :user_id, :tag_ids => [], :tags_attributes => [:id, :name])
+      params.require(:post).permit(:name, :content, :user_id, 
+                                  :tag_ids => [],
+                                  :tags_attributes => [:id, :name],
+                                  :comment => [:name, :content])
     end
 end
