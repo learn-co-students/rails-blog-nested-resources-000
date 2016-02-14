@@ -4,6 +4,24 @@
 <%= @post.name %>
 <h3>Content:</h3>
 <%= @post.content %>
+<h3>Post New Comment:</h3>
+<%= form_for @post do |f| %>
+  <%= f.fields_for :comment do |comments_form| %>
+      <%= comments_form.label :name, "Name:" %>
+      <%= comments_form.text_field :name %><br/>
+      <%= comments_form.label :content, "Content:" %>
+      <%= comments_form.text_area :content %>
+      <%= comments_form.submit "Create Comment" %>
+    <% end %>
+<% end %>
+
+<h3>Comments:</h3>
+<ul>
+  <% @post.comments.each do |comment| %>
+    <li><b><%= comment.name %></b></li>
+    <li><%= comment.content %></li>
+  <% end %>
+</ul>
 <h3>Tags:</h3>
 <ul>
   <% @post.tags.each do |tag| %>
