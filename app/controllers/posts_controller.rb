@@ -30,6 +30,12 @@ class PostsController < ApplicationController
   end
 
   def update
+    if (params[:post][:comments][:content]).length != 0
+      @post = Post.find(params[:id])
+      comment = params[:post][:comments][:content]
+      new_comment = Comment.create(content: comment)
+      @post.comments << new_comment
+    end
     respond_to do |format|
       if @post.update(post_params)
         format.html { redirect_to @post, notice: 'Post was successfully updated.' }
