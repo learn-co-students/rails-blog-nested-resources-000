@@ -1,0 +1,8 @@
+bundle exec rails generate scaffold Comment content:string --no-test-framework
+
+
+
+
+
+
+rails generate migration AddUserRefToPosts user:references --no-test-framework
